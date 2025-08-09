@@ -106,11 +106,8 @@ export default function Sidebar({ open }: SidebarProps) {
           <ListItem disablePadding>
             <ListItemButton
                 onClick={() => {
-                  // Logout: remove JWT token and redirect to login
                   if (typeof window !== 'undefined') {
-                    // If using localStorage for JWT
                     localStorage.removeItem('token');
-                    // If using cookies, clear cookie (client-side only for non-HttpOnly)
                     document.cookie = 'token=; Max-Age=0; path=/;';
                   }
                   router.push('/login');
