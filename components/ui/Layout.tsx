@@ -14,14 +14,9 @@ interface LayoutProps {
 
 export default function Layout({ children, title }: LayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [selectedMenuItem, setSelectedMenuItem] = useState('expenses');
 
   const handleMenuClick = () => {
     setSidebarOpen(!sidebarOpen);
-  };
-
-  const handleMenuItemSelect = (item: string) => {
-    setSelectedMenuItem(item);
   };
 
   return (
@@ -35,8 +30,6 @@ export default function Layout({ children, title }: LayoutProps) {
       
       <Sidebar 
         open={sidebarOpen}
-        selectedItem={selectedMenuItem}
-        onItemSelect={handleMenuItemSelect}
       />
       
       <Box

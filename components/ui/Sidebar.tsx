@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import {
   Drawer,
   List,
@@ -26,21 +27,25 @@ const drawerWidth = 240;
 
 interface SidebarProps {
   open: boolean;
-  selectedItem: string;
-  onItemSelect: (item: string) => void;
 }
 
 const menuItems = [
-  { id: 'dashboard', label: 'Dashboard', icon: <Home /> },
-  { id: 'expenses', label: 'Expense Reports', icon: <Receipt /> },
-  { id: 'analytics', label: 'Analytics', icon: <BarChart /> },
-  { id: 'cards', label: 'Credit Cards', icon: <CreditCard /> },
-  { id: 'recurring', label: 'Recurring Bills', icon: <Refresh /> },
-  { id: 'vendors', label: 'Vendors', icon: <Business /> },
-  { id: 'trends', label: 'Spending Trends', icon: <TrendingUp /> },
+  { id: 'dashboard', label: 'Dashboard', icon: <Home />, route: '/dashboard' },
+  { id: 'expenses', label: 'Expense Reports', icon: <Receipt />, route: '/' },
+  { id: 'transactions', label: 'Transactions', icon: <CreditCard />, route: '/transactions' },
+  { id: 'budgets', label: 'Budgets', icon: <Business />, route: '/budgets' },
+  { id: 'reports', label: 'Reports', icon: <BarChart />, route: '/reports' },
+  { id: 'analytics', label: 'Analytics', icon: <TrendingUp />, route: '/analytics' },
+  { id: 'recurring', label: 'Recurring Bills', icon: <Refresh />, route: '/recurring' },
 ];
 
-export default function Sidebar({ open, selectedItem, onItemSelect }: SidebarProps) {
+export default function Sidebar({ open }: SidebarProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handleNavigation = (route: string) => {
+    router.push(route);
+  };
   return (
     <Drawer
       variant="persistent"
@@ -63,8 +68,8 @@ export default function Sidebar({ open, selectedItem, onItemSelect }: SidebarPro
           {menuItems.map((item) => (
             <ListItem key={item.id} disablePadding>
               <ListItemButton
-                selected={selectedItem === item.id}
-                onClick={() => onItemSelect(item.id)}
+                selected={pathname === item.route}
+                onClick={() => handleNavigation(item.route)}
                 sx={{
                   '&.Mui-selected': {
                     backgroundColor: '#3498db',
@@ -86,7 +91,7 @@ export default function Sidebar({ open, selectedItem, onItemSelect }: SidebarPro
                   sx={{ 
                     '& .MuiTypography-root': { 
                       fontSize: '0.9rem',
-                      fontWeight: selectedItem === item.id ? 600 : 400
+                      fontWeight: pathname === item.route ? 600 : 400
                     } 
                   }}
                 />
@@ -100,7 +105,15 @@ export default function Sidebar({ open, selectedItem, onItemSelect }: SidebarPro
         <List>
           <ListItem disablePadding>
             <ListItemButton
+              selected={pathname === '/settings'}
+              onClick={() => handleNavigation('/settings')}
               sx={{
+                '&.Mui-selected': {
+                  backgroundColor: '#3498db',
+                  '&:hover': {
+                    backgroundColor: '#2980b9',
+                  },
+                },
                 '&:hover': {
                   backgroundColor: '#34495e',
                 },
@@ -115,6 +128,7 @@ export default function Sidebar({ open, selectedItem, onItemSelect }: SidebarPro
                 sx={{ 
                   '& .MuiTypography-root': { 
                     fontSize: '0.9rem',
+                    fontWeight: pathname === '/settings' ? 600 : 400
                   } 
                 }}
               />
