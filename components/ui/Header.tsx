@@ -39,7 +39,7 @@ export default function Header({ onMenuClick, title = "Expense Reports" }: Heade
       position="fixed" 
       sx={{ 
         zIndex: (theme) => theme.zIndex.drawer + 1,
-        backgroundColor: '#34495e',
+        backgroundColor: '#004225',
         boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
       }}
     >

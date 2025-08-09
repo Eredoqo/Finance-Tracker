@@ -16,7 +16,7 @@ import {
   Home,
   Receipt,
   BarChart,
-  Settings,
+  Logout,
   CreditCard,
   Refresh,
   Business,
@@ -63,8 +63,8 @@ export default function Sidebar({ open }: SidebarProps) {
         },
       }}
     >
-      <Box sx={{ overflow: 'auto', mt: 8 }}>
-        <List>
+      <Box sx={{ overflow: 'auto', mt: 8, height: '100%', display: 'flex', flexDirection: 'column' }}>
+        <List sx={{ flexGrow: 1 }}>
           {menuItems.map((item) => (
             <ListItem key={item.id} disablePadding>
               <ListItemButton
@@ -105,30 +105,25 @@ export default function Sidebar({ open }: SidebarProps) {
         <List>
           <ListItem disablePadding>
             <ListItemButton
-              selected={pathname === '/settings'}
-              onClick={() => handleNavigation('/settings')}
+              onClick={() => {
+                // Add logout logic here
+                console.log('Logout clicked');
+              }}
               sx={{
-                '&.Mui-selected': {
-                  backgroundColor: '#3498db',
-                  '&:hover': {
-                    backgroundColor: '#2980b9',
-                  },
-                },
                 '&:hover': {
-                  backgroundColor: '#34495e',
+                  backgroundColor: '#e74c3c',
                 },
                 py: 1.5,
               }}
             >
               <ListItemIcon sx={{ color: '#ecf0f1', minWidth: 40 }}>
-                <Settings />
+                <Logout />
               </ListItemIcon>
               <ListItemText 
-                primary="Settings"
+                primary="Logout"
                 sx={{ 
                   '& .MuiTypography-root': { 
                     fontSize: '0.9rem',
-                    fontWeight: pathname === '/settings' ? 600 : 400
                   } 
                 }}
               />

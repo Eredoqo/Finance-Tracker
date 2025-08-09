@@ -79,18 +79,43 @@ A modern, AI-powered finance tracker built with Next.js, TypeScript, and Chart.j
 ```
 finance-tracker-app/
 ├── app/
-│   ├── api/ai-insights/route.ts    # OpenAI API integration
-│   ├── globals.css                 # Global styles
-│   ├── layout.tsx                  # Root layout
-│   └── page.tsx                    # Main page
+│   ├── analytics/                  # Analytics page with Chart.js
+│   ├── api/                       # API routes
+│   │   ├── ai-insights/route.ts   # OpenAI API integration
+│   │   ├── budgets/route.ts       # Budget management API
+│   │   ├── categories/route.ts    # Categories API
+│   │   ├── dashboard/route.ts     # Dashboard data API
+│   │   ├── recurring/route.ts     # Recurring bills API
+│   │   └── transactions/route.ts  # Transactions API
+│   ├── budgets/                   # Budget management page
+│   ├── dashboard/                 # Main dashboard
+│   ├── recurring/                 # Recurring bills page
+│   ├── reports/                   # Financial reports page
+│   ├── settings/                  # Settings page
+│   ├── transactions/              # Transactions page
+│   ├── globals.css                # Global styles
+│   ├── layout.tsx                 # Root layout
+│   └── page.tsx                   # Landing page
 ├── components/
-│   ├── AIInsights.tsx              # AI insights component
-│   ├── ExpenseCharts.tsx           # Chart.js visualizations
-│   ├── ExpenseForm.tsx             # Add expense form
-│   ├── ExpenseList.tsx             # List of expenses
-│   └── ExpenseSummary.tsx          # Summary statistics
+│   ├── charts/
+│   │   └── ExpenseCharts.tsx      # Chart.js visualizations
+│   ├── forms/
+│   │   └── MUIExpenseForm.tsx     # Material-UI expense form
+│   ├── tables/
+│   │   └── ExpenseReports.tsx     # Data table components
+│   └── ui/
+│       ├── Header.tsx             # Navigation header
+│       ├── Layout.tsx             # Page layout wrapper
+│       ├── MUIThemeProvider.tsx   # Material-UI theme
+│       └── Sidebar.tsx            # Navigation sidebar
+├── lib/
+│   └── prisma.ts                  # Prisma client configuration
+├── prisma/
+│   ├── schema.prisma              # Database schema
+│   └── seed.ts                    # Database seed data
 ├── types/
-│   └── expense.ts                  # TypeScript interfaces
+│   ├── expense.ts                 # TypeScript interfaces
+│   └── index.ts                   # Type exports
 └── ...config files
 ```
 

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Card,
@@ -12,6 +12,8 @@ import {
   ListItemText,
   ListItemIcon,
   Chip,
+  CircularProgress,
+  Alert,
 } from '@mui/material';
 import {
   TrendingUp,
@@ -23,20 +25,47 @@ import {
 } from '@mui/icons-material';
 import Layout from '@/components/ui/Layout';
 
-const mockData = {
-  totalIncome: 8500,
-  totalExpenses: 6200,
-  netIncome: 2300,
-  transactionCount: 45,
-  budgetUtilization: 78,
-  recentTransactions: [
-    { id: 1, description: 'Grocery Store', amount: 156.78, category: 'Food', date: '2025-08-09' },
-    { id: 2, description: 'Gas Station', amount: 45.20, category: 'Transportation', date: '2025-08-08' },
-    { id: 3, description: 'Coffee Shop', amount: 12.50, category: 'Food', date: '2025-08-08' },
-    { id: 4, description: 'Netflix', amount: 15.99, category: 'Entertainment', date: '2025-08-07' },
-    { id: 5, description: 'Salary', amount: 3000, category: 'Income', date: '2025-08-01' },
-  ],
-};
+interface DashboardData {
+  summary: {
+    monthlyIncome: number;
+    monthlyExpenses: number;
+    netIncome: number;
+    totalTransactions: number;
+    totalCategories: number;
+    totalBudgets: number;
+  };
+  expensesByCategory: Array<{
+    name: string;
+    amount: number;
+    color: string;
+    icon: string;
+  }>;
+  recentTransactions: Array<{
+    id: string;
+    amount: number;
+    description: string;
+    category: string;
+    date: string;
+    type: string;
+    merchant?: string;
+  }>;
+  budgetProgress: Array<{
+    id: string;
+    name: string;
+    category: string;
+    spent: number;
+    total: number;
+    remaining: number;
+    percentageUsed: number;
+    color: string;
+    period: string;
+  }>;
+  monthlyTrend: {
+    income: number;
+    expenses: number;
+    month: string;
+  };
+}
 
 function StatCard({ 
   title, 
@@ -88,6 +117,29 @@ function StatCard({
 }
 
 export default function DashboardPage() {
+  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const response = await fetch('/api/dashboard?userId=user-1');
+        if (!response.ok) {
+          throw new Error('Failed to fetch dashboard data');
+        }
+        const data = await response.json();
+        setDashboardData(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -102,11 +154,33 @@ export default function DashboardPage() {
     });
   };
 
+  if (loading) {
+    return (
+      <Layout title="Dashboard">
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+          <CircularProgress />
+        </Box>
+      </Layout>
+    );
+  }
+
+  if (error || !dashboardData) {
+    return (
+      <Layout title="Dashboard">
+        <Box sx={{ p: 3 }}>
+          <Alert severity="error">
+            {error || 'Failed to load dashboard data'}
+          </Alert>
+        </Box>
+      </Layout>
+    );
+  }
+
   return (
     <Layout title="Dashboard">
       <Box sx={{ p: 3 }}>
         <Typography variant="h4" sx={{ mb: 3, fontWeight: 600 }}>
-          Financial Overview
+          Financial Overview - {dashboardData.monthlyTrend.month}
         </Typography>
 
         {/* Stats Cards */}
@@ -123,34 +197,34 @@ export default function DashboardPage() {
           }}
         >
           <StatCard
-            title="Total Income"
-            value={formatCurrency(mockData.totalIncome)}
+            title="Monthly Income"
+            value={formatCurrency(dashboardData.summary.monthlyIncome)}
             icon={<AttachMoney fontSize="large" />}
             trend="up"
             trendValue="+12.5%"
           />
           <StatCard
-            title="Total Expenses"
-            value={formatCurrency(mockData.totalExpenses)}
+            title="Monthly Expenses"
+            value={formatCurrency(dashboardData.summary.monthlyExpenses)}
             icon={<Receipt fontSize="large" />}
             trend="down"
             trendValue="-8.2%"
           />
           <StatCard
             title="Net Income"
-            value={formatCurrency(mockData.netIncome)}
+            value={formatCurrency(dashboardData.summary.netIncome)}
             icon={<Savings fontSize="large" />}
-            trend="up"
-            trendValue="+15.3%"
+            trend={dashboardData.summary.netIncome > 0 ? "up" : "down"}
+            trendValue={dashboardData.summary.netIncome > 0 ? "+15.3%" : "-5.2%"}
           />
           <StatCard
-            title="Transactions"
-            value={mockData.transactionCount.toString()}
+            title="Total Transactions"
+            value={dashboardData.summary.totalTransactions.toString()}
             icon={<CreditCard fontSize="large" />}
           />
         </Box>
 
-        {/* Recent Transactions */}
+        {/* Recent Transactions and Budget Overview */}
         <Box 
           sx={{ 
             display: 'grid', 
@@ -166,23 +240,23 @@ export default function DashboardPage() {
               Recent Transactions
             </Typography>
             <List>
-              {mockData.recentTransactions.map((transaction) => (
+              {dashboardData.recentTransactions.slice(0, 5).map((transaction) => (
                 <ListItem key={transaction.id} divider>
                   <ListItemIcon>
                     <Receipt />
                   </ListItemIcon>
                   <ListItemText
                     primary={transaction.description}
-                    secondary={`${transaction.category} • ${formatDate(transaction.date)}`}
+                    secondary={`${transaction.category} • ${formatDate(transaction.date)}${transaction.merchant ? ` • ${transaction.merchant}` : ''}`}
                   />
                   <Typography
                     variant="body1"
                     sx={{
                       fontWeight: 'medium',
-                      color: transaction.category === 'Income' ? 'success.main' : 'text.primary'
+                      color: transaction.type === 'INCOME' ? 'success.main' : 'text.primary'
                     }}
                   >
-                    {transaction.category === 'Income' ? '+' : '-'}{formatCurrency(transaction.amount)}
+                    {transaction.type === 'INCOME' ? '+' : '-'}{formatCurrency(transaction.amount)}
                   </Typography>
                 </ListItem>
               ))}
@@ -191,20 +265,39 @@ export default function DashboardPage() {
 
           <Paper sx={{ p: 2 }}>
             <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
-              Budget Overview
+              Active Budgets
             </Typography>
             <Box sx={{ mb: 2 }}>
-              <Typography variant="body2" color="textSecondary">
-                Monthly Budget Utilization
+              <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
+                Budget Utilization
               </Typography>
-              <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 1 }}>
-                {mockData.budgetUtilization}%
-              </Typography>
-              <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                <Chip label="Food: 85%" size="small" color="warning" />
-                <Chip label="Transport: 65%" size="small" color="success" />
-                <Chip label="Shopping: 92%" size="small" color="error" />
-              </Box>
+              {dashboardData.budgetProgress.length > 0 ? (
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                  {dashboardData.budgetProgress.slice(0, 4).map((budget) => (
+                    <Box key={budget.id}>
+                      <Typography variant="body2" sx={{ mb: 0.5 }}>
+                        {budget.name}
+                      </Typography>
+                      <Chip 
+                        label={`${budget.percentageUsed.toFixed(0)}% used`}
+                        size="small" 
+                        color={
+                          budget.percentageUsed > 90 ? 'error' : 
+                          budget.percentageUsed > 75 ? 'warning' : 'success'
+                        }
+                        sx={{ mb: 1 }}
+                      />
+                      <Typography variant="caption" color="textSecondary" display="block">
+                        {formatCurrency(budget.spent)} of {formatCurrency(budget.total)}
+                      </Typography>
+                    </Box>
+                  ))}
+                </Box>
+              ) : (
+                <Typography variant="body2" color="textSecondary">
+                  No active budgets
+                </Typography>
+              )}
             </Box>
           </Paper>
         </Box>
