@@ -30,7 +30,6 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Otherwise, handle financial insights
     const { expenses, budgets = [], categories = [] }: { 
       expenses?: Expense[], 
       budgets?: unknown[], 
@@ -42,7 +41,6 @@ export async function POST(request: NextRequest) {
     }
 
     try {
-      // Use the correct model name
       const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
       
       const expenseData = expenses.map((expense: Expense) => ({
