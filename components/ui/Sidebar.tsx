@@ -30,7 +30,7 @@ interface SidebarProps {
 }
 
 const menuItems = [
-  { id: 'dashboard', label: 'Dashboard', icon: <Home />, route: '/' },
+  { id: 'dashboard', label: 'Dashboard', icon: <Home />, route: '/dashboard' },
   { id: 'expenses', label: 'Expense Reports', icon: <Receipt />, route: '/expenses' },
   { id: 'transactions', label: 'Transactions', icon: <CreditCard />, route: '/transactions' },
   { id: 'budgets', label: 'Budgets', icon: <Business />, route: '/budgets' },

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import MUIThemeProvider from "@/components/ui/MUIThemeProvider";
+import ChatAI from '@/components/ChatAI';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,6 +31,7 @@ export default function RootLayout({
       >
         <MUIThemeProvider>
           {children}
+          <ChatAI />
         </MUIThemeProvider>
       </body>
     </html>
