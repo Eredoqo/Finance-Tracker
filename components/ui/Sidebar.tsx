@@ -30,8 +30,8 @@ interface SidebarProps {
 }
 
 const menuItems = [
-  { id: 'dashboard', label: 'Dashboard', icon: <Home />, route: '/dashboard' },
-  { id: 'expenses', label: 'Expense Reports', icon: <Receipt />, route: '/' },
+  { id: 'dashboard', label: 'Dashboard', icon: <Home />, route: '/' },
+  { id: 'expenses', label: 'Expense Reports', icon: <Receipt />, route: '/expenses' },
   { id: 'transactions', label: 'Transactions', icon: <CreditCard />, route: '/transactions' },
   { id: 'budgets', label: 'Budgets', icon: <Business />, route: '/budgets' },
   { id: 'reports', label: 'Reports', icon: <BarChart />, route: '/reports' },
@@ -105,10 +105,16 @@ export default function Sidebar({ open }: SidebarProps) {
         <List>
           <ListItem disablePadding>
             <ListItemButton
-              onClick={() => {
-                // Add logout logic here
-                console.log('Logout clicked');
-              }}
+                onClick={() => {
+                  // Logout: remove JWT token and redirect to login
+                  if (typeof window !== 'undefined') {
+                    // If using localStorage for JWT
+                    localStorage.removeItem('token');
+                    // If using cookies, clear cookie (client-side only for non-HttpOnly)
+                    document.cookie = 'token=; Max-Age=0; path=/;';
+                  }
+                  router.push('/login');
+                }}
               sx={{
                 '&:hover': {
                   backgroundColor: '#e74c3c',

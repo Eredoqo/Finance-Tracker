@@ -54,7 +54,7 @@ interface MUIExpenseFormProps {
   onAddExpense: (expense: ExpenseFormData) => void;
 }
 
-export default function MUIExpenseForm({ open, onClose, onAddExpense }: MUIExpenseFormProps) {
+export default function ExpenseForm({ open, onClose, onAddExpense }: MUIExpenseFormProps) {
   const [formData, setFormData] = useState<ExpenseFormData>({
     amount: 0,
     description: '',

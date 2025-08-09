@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { getUserFromToken } from '@/lib/utils/auth';
 import {
   AppBar,
   Toolbar,
@@ -15,7 +16,6 @@ import {
 import {
   Menu as MenuIcon,
   NotificationsOutlined,
-  Settings,
 } from '@mui/icons-material';
 
 interface HeaderProps {
@@ -25,6 +25,11 @@ interface HeaderProps {
 
 export default function Header({ onMenuClick, title = "Expense Reports" }: HeaderProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [user, setUser] = useState<{ name?: string; email?: string; id?: string } | null>(null);
+
+  useEffect(() => {
+    setUser(getUserFromToken());
+  }, []);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -68,7 +73,7 @@ export default function Header({ onMenuClick, title = "Expense Reports" }: Heade
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <Chip 
-            label="Marta's Studio" 
+            label={user?.name || user?.email || 'Guest'}
             size="small"
             sx={{ 
               backgroundColor: 'rgba(255,255,255,0.1)',
@@ -76,15 +81,9 @@ export default function Header({ onMenuClick, title = "Expense Reports" }: Heade
               border: '1px solid rgba(255,255,255,0.2)'
             }}
           />
-          
           <IconButton color="inherit">
             <NotificationsOutlined />
           </IconButton>
-
-          <IconButton color="inherit">
-            <Settings />
-          </IconButton>
-
           <IconButton
             size="large"
             aria-label="account of current user"
@@ -94,10 +93,9 @@ export default function Header({ onMenuClick, title = "Expense Reports" }: Heade
             color="inherit"
           >
             <Avatar sx={{ width: 32, height: 32, bgcolor: '#e74c3c' }}>
-              M
+              {user?.name ? user.name[0] : user?.email ? user.email[0] : '?'}
             </Avatar>
           </IconButton>
-
           <Menu
             id="menu-appbar"
             anchorEl={anchorEl}
@@ -113,8 +111,8 @@ export default function Header({ onMenuClick, title = "Expense Reports" }: Heade
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem onClick={handleClose}>Settings</MenuItem>
+            <MenuItem onClick={handleClose}>{user?.name || 'Profile'}</MenuItem>
+            <MenuItem onClick={handleClose}>{user?.email || 'Settings'}</MenuItem>
             <MenuItem onClick={handleClose}>Logout</MenuItem>
           </Menu>
         </Box>
