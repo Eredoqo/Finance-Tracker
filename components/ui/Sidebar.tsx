@@ -57,7 +57,7 @@ export default function Sidebar({ open }: SidebarProps) {
         '& .MuiDrawer-paper': {
           width: drawerWidth,
           boxSizing: 'border-box',
-          backgroundColor: '#2c3e50',
+          backgroundColor: '#004225',
           color: '#ecf0f1',
           borderRight: 'none',
         },
@@ -72,13 +72,13 @@ export default function Sidebar({ open }: SidebarProps) {
                 onClick={() => handleNavigation(item.route)}
                 sx={{
                   '&.Mui-selected': {
-                    backgroundColor: '#3498db',
+                    backgroundColor: '#8fbc8f',
                     '&:hover': {
-                      backgroundColor: '#2980b9',
+                      backgroundColor: '#9caf88',
                     },
                   },
                   '&:hover': {
-                    backgroundColor: '#34495e',
+                    backgroundColor: '#9caf88',
                   },
                   py: 1.5,
                 }}

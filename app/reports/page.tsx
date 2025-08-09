@@ -342,13 +342,11 @@ export default function ReportsPage() {
                 <ListItem>
                   <ListItemText
                     primary="Savings Rate"
-                    secondary={
-                      <Chip
-                        label={`${summaryData.savingsRate.toFixed(1)}%`}
-                        color={summaryData.savingsRate > 20 ? 'success' : summaryData.savingsRate > 10 ? 'warning' : 'error'}
-                        size="small"
-                      />
-                    }
+                  />
+                  <Chip
+                    label={`${summaryData.savingsRate.toFixed(1)}%`}
+                    color={summaryData.savingsRate > 20 ? 'success' : summaryData.savingsRate > 10 ? 'warning' : 'error'}
+                    size="small"
                   />
                 </ListItem>
               </List>
