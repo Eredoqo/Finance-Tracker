@@ -1,36 +1,167 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Finance Tracker App
+
+A modern, AI-powered finance tracker built with Next.js, TypeScript, and Chart.js.
+
+## Features
+
+- ✅ **Expense Tracking**: Add, view, and delete expenses with categories
+- 📊 **Visual Analytics**: Interactive charts showing spending patterns
+- 🧠 **AI Insights**: Get personalized financial advice using OpenAI GPT
+- 📱 **Responsive Design**: Works on desktop, tablet, and mobile
+- 💾 **Local Storage**: Data persists in your browser
+
+## Tech Stack
+
+- **Frontend**: Next.js 15 + TypeScript + Tailwind CSS
+- **Charts**: Chart.js + React Chart.js 2
+- **AI**: OpenAI GPT-3.5-turbo
+- **Icons**: Lucide React
+- **Storage**: Browser localStorage
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Node.js 18+ 
+- npm or yarn
+- OpenAI API key (optional, for AI insights)
+
+### Installation
+
+1. **Clone and navigate to the project**:
+   ```bash
+   cd finance-tracker-app
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables**:
+   - Copy `.env.local` file
+   - Add your OpenAI API key:
+     ```
+     OPENAI_API_KEY=your_actual_api_key_here
+     ```
+   - Get your API key from: https://platform.openai.com/api-keys
+
+4. **Run the development server**:
+   ```bash
+   npm run dev
+   ```
+
+5. **Open your browser**:
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+## Usage
+
+### Adding Expenses
+1. Fill out the expense form with:
+   - Amount (in USD)
+   - Category (Food, Transportation, etc.)
+   - Description
+   - Date
+2. Click "Add Expense" to save
+
+### Viewing Analytics
+- **Summary Cards**: See total expenses, monthly spending, and trends
+- **Charts**: View spending by category (pie chart) and monthly trends (bar chart)
+- **Expense List**: Browse all expenses with ability to delete
+
+### AI Insights
+1. Add some expenses first
+2. Click "Get AI Insights" in the right sidebar
+3. Receive personalized financial advice and spending analysis
+
+## Project Structure
+
+```
+finance-tracker-app/
+├── app/
+│   ├── api/ai-insights/route.ts    # OpenAI API integration
+│   ├── globals.css                 # Global styles
+│   ├── layout.tsx                  # Root layout
+│   └── page.tsx                    # Main page
+├── components/
+│   ├── AIInsights.tsx              # AI insights component
+│   ├── ExpenseCharts.tsx           # Chart.js visualizations
+│   ├── ExpenseForm.tsx             # Add expense form
+│   ├── ExpenseList.tsx             # List of expenses
+│   └── ExpenseSummary.tsx          # Summary statistics
+├── types/
+│   └── expense.ts                  # TypeScript interfaces
+└── ...config files
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Environment Variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `OPENAI_API_KEY` | OpenAI API key for AI insights | Optional |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Available Scripts
 
-## Learn More
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
 
-To learn more about Next.js, take a look at the following resources:
+## Features in Detail
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Expense Categories
+- Food & Dining
+- Transportation
+- Shopping
+- Entertainment
+- Bills & Utilities
+- Healthcare
+- Travel
+- Education
+- Other
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### AI Insights Features
+- Spending pattern analysis
+- Category breakdown insights
+- Monthly comparison trends
+- Personalized saving suggestions
+- Financial health assessment
 
-## Deploy on Vercel
+## Next Steps
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Want to enhance the app? Consider adding:
+- 🏦 Bank account integration
+- 📅 Budget planning and goals
+- 📧 Email/SMS expense reminders
+- 🔄 Data export/import (CSV, JSON)
+- 👥 Multi-user support
+- 🎯 Expense predictions
+- 📊 More chart types and filters
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Troubleshooting
+
+### Common Issues
+
+1. **AI Insights not working**: 
+   - Check if OPENAI_API_KEY is set correctly
+   - Ensure you have OpenAI credits
+
+2. **Charts not rendering**:
+   - Check browser console for errors
+   - Ensure Chart.js dependencies are installed
+
+3. **Data not persisting**:
+   - Check if localStorage is enabled in browser
+   - Try clearing browser cache
+
+## License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request

@@ -1,0 +1,108 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  transactions Transaction[]
+  budgets      Budget[]
+  categories   Category[]
+
+  @@map("users")
+}
+
+model Category {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  color       String?
+  icon        String?
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+  budgets      Budget[]
+
+  @@unique([name, userId])
+  @@map("categories")
+}
+
+model Transaction {
+  id          String            @id @default(uuid())
+  amount      Decimal           @db.Decimal(10, 2)
+  description String
+  date        DateTime
+  type        TransactionType
+  status      TransactionStatus @default(PENDING)
+  merchant    String?
+  notes       String?
+  receiptUrl  String?
+  userId      String
+  categoryId  String
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  // Relations
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id])
+
+  @@map("transactions")
+}
+
+model Budget {
+  id         String      @id @default(uuid())
+  name       String
+  amount     Decimal     @db.Decimal(10, 2)
+  spent      Decimal     @default(0) @db.Decimal(10, 2)
+  period     BudgetPeriod
+  startDate  DateTime
+  endDate    DateTime
+  userId     String
+  categoryId String?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  // Relations
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category Category? @relation(fields: [categoryId], references: [id])
+
+  @@map("budgets")
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+enum TransactionStatus {
+  DRAFT
+  PENDING
+  APPROVED
+  REJECTED
+  PROCESSING
+  REIMBURSED
+}
+
+enum BudgetPeriod {
+  WEEKLY
+  MONTHLY
+  QUARTERLY
+  YEARLY
+}
