@@ -3,24 +3,15 @@
 import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Chip from '@mui/material/Chip';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 
-import AttachMoney from '@mui/icons-material/AttachMoney';
-import Receipt from '@mui/icons-material/Receipt';
-
-
-import CreditCard from '@mui/icons-material/CreditCard';
-import Savings from '@mui/icons-material/Savings';
 import { DashboardData } from '@/dto/dashboard.dto';
+import { formatCurrency, formatDate } from '@/lib/utils/format';
 import Layout from '@/components/ui/Layout';
-import StatCard from '../../components/StatisticCard';
+import StatCards from '@/components/StatCards';
+import RecentTransactions from '@/components/RecentTransactions';
+import ActiveBudgets from '@/components/ActiveBudgets';
 
 
 export default function DashboardPage() {
@@ -46,20 +37,6 @@ export default function DashboardPage() {
 
     fetchDashboardData();
   }, []);
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(amount);
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric'
-    });
-  };
 
   if (loading) {
     return (
@@ -89,8 +66,6 @@ export default function DashboardPage() {
         <Typography variant="h4" sx={{ mb: 3, fontWeight: 600 }}>
           Financial Overview - {dashboardData.monthlyTrend.month}
         </Typography>
-
-        {/* Stats Cards */}
         <Box 
           sx={{ 
             display: 'grid', 
@@ -103,34 +78,7 @@ export default function DashboardPage() {
             mb: 4 
           }}
         >
-          <StatCard
-            title="Monthly Income"
-            value={formatCurrency(dashboardData.summary.monthlyIncome)}
-            icon={<AttachMoney fontSize="large" />}
-            trend="up"
-            trendValue="+12.5%"
-          />
-          <StatCard
-            title="Monthly Expenses"
-            value={formatCurrency(dashboardData.summary.monthlyExpenses)}
-            icon={<Receipt fontSize="large" />}
-            trend="down"
-            trendValue="-8.2%"
-          />
-          <StatCard
-            title="Net Income"
-            value={formatCurrency(dashboardData.summary.netIncome)}
-            icon={<Savings fontSize="large" />}
-            trend={dashboardData.summary.netIncome > 0 ? "up" : "down"}
-            trendValue={dashboardData.summary.netIncome > 0 ? "+15.3%" : "-5.2%"}
-          />
-          <StatCard
-            title="Total Transactions"
-            value={dashboardData.summary.totalTransactions.toString()}
-            icon={<CreditCard fontSize="large" />}
-            trend="neutral"
-            trendValue=""
-          />
+          <StatCards summary={dashboardData.summary} formatCurrency={formatCurrency} />
         </Box>
         <Box 
           sx={{ 
@@ -142,71 +90,15 @@ export default function DashboardPage() {
             gap: 3 
           }}
         >
-          <Paper sx={{ p: 2 }}>
-            <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
-              Recent Transactions
-            </Typography>
-            <List>
-              {dashboardData.recentTransactions.slice(0, 5).map((transaction) => (
-                <ListItem key={transaction.id} divider>
-                  <ListItemIcon>
-                    <Receipt />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={transaction.description}
-                    secondary={`${transaction.category} • ${formatDate(transaction.date)}${transaction.merchant ? ` • ${transaction.merchant}` : ''}`}
-                  />
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      fontWeight: 'medium',
-                      color: transaction.type === 'INCOME' ? 'success.main' : 'text.primary'
-                    }}
-                  >
-                    {transaction.type === 'INCOME' ? '+' : '-'}{formatCurrency(transaction.amount)}
-                  </Typography>
-                </ListItem>
-              ))}
-            </List>
-          </Paper>
-
-          <Paper sx={{ p: 2 }}>
-            <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
-              Active Budgets
-            </Typography>
-            <Box sx={{ mb: 2 }}>
-              <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
-                Budget Utilization
-              </Typography>
-              {dashboardData.budgetProgress.length > 0 ? (
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                  {dashboardData.budgetProgress.slice(0, 4).map((budget) => (
-                    <Box key={budget.id}>
-                      <Typography variant="body2" sx={{ mb: 0.5 }}>
-                        {budget.name}
-                      </Typography>
-                      <Chip 
-                        label={`${budget.percentageUsed.toFixed(0)}% used`}
-                        size="small" 
-                        color={
-                          budget.percentageUsed > 90 ? 'error' : 
-                          budget.percentageUsed > 75 ? 'warning' : 'success'
-                        }
-                        sx={{ mb: 1 }}
-                      />
-                      <Typography variant="caption" color="textSecondary" display="block">
-                        {formatCurrency(budget.spent)} of {formatCurrency(budget.total)}
-                      </Typography>
-                    </Box>
-                  ))}
-                </Box>
-              ) : (
-                <Typography variant="body2" color="textSecondary">
-                  No active budgets
-                </Typography>
-              )}
-            </Box>
-          </Paper>
+          <RecentTransactions
+            transactions={dashboardData.recentTransactions}
+            formatCurrency={formatCurrency}
+            formatDate={formatDate}
+          />
+          <ActiveBudgets
+            budgets={dashboardData.budgetProgress}
+            formatCurrency={formatCurrency}
+          />
         </Box>
       </Box>
     </Layout>

@@ -8,9 +8,10 @@ import TrendingDown from '@mui/icons-material/TrendingDown';
 
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import React from 'react';
 
-const StatCard = ({
+import { StatCardProps } from '@/dto/stat-card.dto';
+
+const StatCard: React.FC<StatCardProps> = ({
   title,
   value,
   icon,
