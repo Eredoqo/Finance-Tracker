@@ -1,28 +1,25 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
-  Paper,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  Chip,
-  CircularProgress,
-  Alert,
-} from '@mui/material';
-import {
-  TrendingUp,
-  TrendingDown,
-  AttachMoney,
-  Receipt,
-  CreditCard,
-  Savings,
-} from '@mui/icons-material';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import Chip from '@mui/material/Chip';
+import CircularProgress from '@mui/material/CircularProgress';
+import Alert from '@mui/material/Alert';
+
+import TrendingUp from '@mui/icons-material/TrendingUp';
+import TrendingDown from '@mui/icons-material/TrendingDown';
+import AttachMoney from '@mui/icons-material/AttachMoney';
+import Receipt from '@mui/icons-material/Receipt';
+import CreditCard from '@mui/icons-material/CreditCard';
+import Savings from '@mui/icons-material/Savings';
 import Layout from '@/components/ui/Layout';
 
 interface DashboardData {
@@ -223,8 +220,6 @@ export default function DashboardPage() {
             icon={<CreditCard fontSize="large" />}
           />
         </Box>
-
-        {/* Recent Transactions and Budget Overview */}
         <Box 
           sx={{ 
             display: 'grid', 

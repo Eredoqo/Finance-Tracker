@@ -4,6 +4,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import NotificationsOutlined from "@mui/icons-material/NotificationsOutlined";
+import { Divider } from "@mui/material";
 
 const userId = typeof window !== 'undefined' ? localStorage.getItem('user_id') : null;
 type Notification = {
@@ -46,6 +47,7 @@ const NotificationPopover: React.FC = () => {
         <Typography variant="h6" sx={{ mb: 1 }}>
           Notifications
         </Typography>
+        <Divider />
         <Box>
           {notifications.length === 0 ? (
             <Typography variant="body2" sx={{ mb: 1 }}>
