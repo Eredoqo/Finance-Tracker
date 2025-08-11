@@ -10,4 +10,5 @@ export interface Budget {
     name: string;
     color: string;
   } | null;
+  status?: 'Over Budget' | 'Near Limit' | 'On Track' | string;
 }

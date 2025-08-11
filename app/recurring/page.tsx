@@ -1,64 +1,49 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { 
-  Box, 
-  Typography, 
-  Paper,
-  Card,
-  CardContent,
-  Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Chip,
-  Alert,
-  CircularProgress,
-  IconButton,
-  Tooltip,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  Divider,
-} from '@mui/material';
-import {
-  Add,
-  Refresh,
-  Schedule,
-  Warning,
-  CheckCircle,
-  Error as ErrorIcon,
-  Edit,
-  Delete,
-  Notifications,
-  CalendarToday,
-  AttachMoney,
-  TrendingUp,
-} from '@mui/icons-material';
-import Layout from '@/components/ui/Layout';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Chip from '@mui/material/Chip';
+import Alert from '@mui/material/Alert';
+import CircularProgress from '@mui/material/CircularProgress';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import Divider from '@mui/material/Divider';
 
-interface RecurringBill {
-  id: string;
-  name: string;
-  amount: number;
-  category: string;
-  categoryColor: string | null;
-  frequency: string;
-  nextDueDate: string;
-  lastPaidDate: string;
-  merchant: string | null;
-  status: string;
-  occurrences: number;
-  averageAmount: number;
-}
+import Add from '@mui/icons-material/Add';
+import Refresh from '@mui/icons-material/Refresh';
+import Schedule from '@mui/icons-material/Schedule';
+import Warning from '@mui/icons-material/Warning';
+import CheckCircle from '@mui/icons-material/CheckCircle';
+import ErrorIcon from '@mui/icons-material/Error';
+import Edit from '@mui/icons-material/Edit';
+import Delete from '@mui/icons-material/Delete';
+import Notifications from '@mui/icons-material/Notifications';
+import CalendarToday from '@mui/icons-material/CalendarToday';
+import AttachMoney from '@mui/icons-material/AttachMoney';
+import TrendingUp from '@mui/icons-material/TrendingUp';
+import Layout from '@/components/ui/Layout';
+import { RecurringBill } from '@/dto/recurring-bill.dto';
+
+// RecurringBill now imported from DTO
 
 export default function RecurringPage() {
   const [recurringBills, setRecurringBills] = useState<RecurringBill[]>([]);

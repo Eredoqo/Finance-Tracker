@@ -5,6 +5,6 @@ export interface Transaction {
   category: string;
   date: string;
   type: 'INCOME' | 'EXPENSE';
-  status?: string;
+  status: string;
   merchant?: string;
 }

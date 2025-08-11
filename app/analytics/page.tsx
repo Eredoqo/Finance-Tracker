@@ -1,22 +1,20 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { 
-  Box, 
-  Typography, 
-  Paper, 
-  Card, 
-  CardContent, 
-  Select, 
-  MenuItem, 
-  FormControl, 
-  InputLabel,
-  Alert,
-  CircularProgress,
-  Chip,
-  Tabs,
-  Tab,
-} from '@mui/material';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Alert from '@mui/material/Alert';
+import CircularProgress from '@mui/material/CircularProgress';
+import Chip from '@mui/material/Chip';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -45,15 +43,7 @@ ChartJS.register(
   ArcElement
 );
 
-interface Transaction {
-  id: string;
-  amount: number;
-  description: string;
-  category: string;
-  date: string;
-  type: 'INCOME' | 'EXPENSE';
-  merchant?: string;
-}
+import { Transaction } from '@/dto/transaction.dto';
 
 export default function AnalyticsPage() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);

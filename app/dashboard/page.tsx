@@ -2,8 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import List from '@mui/material/List';
@@ -14,104 +12,16 @@ import Chip from '@mui/material/Chip';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 
-import TrendingUp from '@mui/icons-material/TrendingUp';
-import TrendingDown from '@mui/icons-material/TrendingDown';
 import AttachMoney from '@mui/icons-material/AttachMoney';
 import Receipt from '@mui/icons-material/Receipt';
+
+
 import CreditCard from '@mui/icons-material/CreditCard';
 import Savings from '@mui/icons-material/Savings';
+import { DashboardData } from '@/dto/dashboard.dto';
 import Layout from '@/components/ui/Layout';
+import StatCard from '../../components/StatisticCard';
 
-interface DashboardData {
-  summary: {
-    monthlyIncome: number;
-    monthlyExpenses: number;
-    netIncome: number;
-    totalTransactions: number;
-    totalCategories: number;
-    totalBudgets: number;
-  };
-  expensesByCategory: Array<{
-    name: string;
-    amount: number;
-    color: string;
-    icon: string;
-  }>;
-  recentTransactions: Array<{
-    id: string;
-    amount: number;
-    description: string;
-    category: string;
-    date: string;
-    type: string;
-    merchant?: string;
-  }>;
-  budgetProgress: Array<{
-    id: string;
-    name: string;
-    category: string;
-    spent: number;
-    total: number;
-    remaining: number;
-    percentageUsed: number;
-    color: string;
-    period: string;
-  }>;
-  monthlyTrend: {
-    income: number;
-    expenses: number;
-    month: string;
-  };
-}
-
-function StatCard({ 
-  title, 
-  value, 
-  icon, 
-  trend, 
-  trendValue 
-}: { 
-  title: string; 
-  value: string; 
-  icon: React.ReactNode; 
-  trend?: 'up' | 'down'; 
-  trendValue?: string;
-}) {
-  return (
-    <Card>
-      <CardContent>
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Box>
-            <Typography color="textSecondary" gutterBottom variant="body2">
-              {title}
-            </Typography>
-            <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
-              {value}
-            </Typography>
-            {trend && trendValue && (
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                {trend === 'up' ? (
-                  <TrendingUp fontSize="small" color="success" />
-                ) : (
-                  <TrendingDown fontSize="small" color="error" />
-                )}
-                <Typography 
-                  variant="body2" 
-                  color={trend === 'up' ? 'success.main' : 'error.main'}
-                >
-                  {trendValue}
-                </Typography>
-              </Box>
-            )}
-          </Box>
-          <Box sx={{ color: 'primary.main' }}>
-            {icon}
-          </Box>
-        </Box>
-      </CardContent>
-    </Card>
-  );
-}
 
 export default function DashboardPage() {
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
@@ -218,6 +128,8 @@ export default function DashboardPage() {
             title="Total Transactions"
             value={dashboardData.summary.totalTransactions.toString()}
             icon={<CreditCard fontSize="large" />}
+            trend="neutral"
+            trendValue=""
           />
         </Box>
         <Box 
