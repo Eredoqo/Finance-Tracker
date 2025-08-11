@@ -6,14 +6,14 @@ import Visibility from '@mui/icons-material/Visibility';
 import Edit from '@mui/icons-material/Edit';
 import Groups from '@mui/icons-material/Groups';
 import Delete from '@mui/icons-material/Delete';
-import { DataGrid, GridColDef, GridRenderCellParams, GridValueFormatter } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRenderCellParams, GridValueFormatter, GridRowSelectionModel } from '@mui/x-data-grid';
 import { ExpenseTableProps } from '@/dto/expense-table.dto';
 import { formatCurrency, formatDate } from '@/lib/utils/format';
 import { ExpenseTableDataGridProps } from '@/dto/datagrid-expenses-dto';
 import { Box } from '@mui/system';
 
 export default function ExpenseTableDataGrid({ expenses, onDeleteExpense }: ExpenseTableDataGridProps) {
-  const [selectedExpenses, setSelectedExpenses] = React.useState<string[]>([]);
+  const [selectedExpenses, setSelectedExpenses] = React.useState<GridRowSelectionModel>({ type: 'include', ids: new Set() });
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -68,11 +68,9 @@ export default function ExpenseTableDataGrid({ expenses, onDeleteExpense }: Expe
           setRowsPerPage(model.pageSize);
         }}
         checkboxSelection
-  rowSelectionModel={selectedExpenses as any}
-        onRowSelectionModelChange={(newSelection) => {
-          if (Array.isArray(newSelection)) {
-            setSelectedExpenses(newSelection as string[]);
-          }
+        rowSelectionModel={selectedExpenses}
+        onRowSelectionModelChange={(newSelection: GridRowSelectionModel) => {
+          setSelectedExpenses(newSelection);
         }}
       />
       <Menu

@@ -30,10 +30,8 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const { expenses, budgets = [], categories = [] }: { 
-      expenses?: Expense[], 
-      budgets?: unknown[], 
-      categories?: unknown[] 
+    const { expenses }: { 
+      expenses?: Expense[]
     } = body;
     
     if (!expenses || expenses.length === 0) {

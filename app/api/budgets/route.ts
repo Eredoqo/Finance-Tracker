@@ -5,7 +5,7 @@ import { BudgetPeriod } from '@prisma/client';
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId') || 'user-1'; // Default to first user for demo
+    const userId = searchParams.get('userId') || 'user-1'; 
     const period = searchParams.get('period') as BudgetPeriod | null;
 
     const where: {
@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
       startDate,
       endDate,
       categoryId,
-      userId = 'user-1' // Default to first user for demo
+      userId = 'user-1'
     } = body;
 
     const budget = await prisma.budget.create({
@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
         endDate: new Date(endDate),
         categoryId,
         userId,
-        spent: 0, // Initialize with 0 spending
+        spent: 0, 
       },
       include: {
         category: true,
