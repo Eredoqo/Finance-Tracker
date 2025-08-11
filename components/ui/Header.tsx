@@ -1,31 +1,37 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { getUserFromToken } from '@/lib/utils/auth';
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  IconButton,
-  Avatar,
-  Box,
-  Menu,
-  MenuItem,
-  Chip,
-} from '@mui/material';
-import {
-  Menu as MenuIcon,
-  NotificationsOutlined,
-} from '@mui/icons-material';
+import React, { useState, useEffect } from "react";
+import { getUserFromToken } from "@/lib/utils/auth";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Chip from "@mui/material/Chip";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { Menu as MenuIcon } from "@mui/icons-material";
+import SettingsIcon from "@mui/icons-material/Settings";
+import NotificationPopover from "./NotificationPopover";
 
 interface HeaderProps {
   onMenuClick: () => void;
   title?: string;
 }
 
-export default function Header({ onMenuClick, title = "Expense Reports" }: HeaderProps) {
+export default function Header({
+  onMenuClick,
+  title = "Expense Reports",
+}: HeaderProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [user, setUser] = useState<{ name?: string; email?: string; id?: string } | null>(null);
+  const [user, setUser] = useState<{
+    name?: string;
+    email?: string;
+    id?: string;
+  } | null>(null);
 
   useEffect(() => {
     setUser(getUserFromToken());
@@ -39,13 +45,22 @@ export default function Header({ onMenuClick, title = "Expense Reports" }: Heade
     setAnchorEl(null);
   };
 
+  const getInitials = (name?: string) => {
+    if (!name) return "?";
+    const parts = name.trim().split(" ");
+    if (parts.length >= 2) {
+      return parts[0][0] + parts[parts.length - 1][0];
+    }
+    return parts[0][0];
+  }
+
   return (
-    <AppBar 
-      position="fixed" 
-      sx={{ 
+    <AppBar
+      position="fixed"
+      sx={{
         zIndex: (theme) => theme.zIndex.drawer + 1,
-        backgroundColor: '#004225',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+        backgroundColor: "#004225",
+        boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
       }}
     >
       <Toolbar>
@@ -59,31 +74,29 @@ export default function Header({ onMenuClick, title = "Expense Reports" }: Heade
           <MenuIcon />
         </IconButton>
 
-        <Typography 
-          variant="h6" 
-          component="div" 
-          sx={{ 
+        <Typography
+          variant="h6"
+          component="div"
+          sx={{
             flexGrow: 1,
             fontWeight: 500,
-            color: '#ecf0f1'
+            color: "#ecf0f1",
           }}
         >
           {title}
         </Typography>
 
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Chip 
-            label={user?.name || user?.email || 'Guest'}
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <Chip
+            label={user?.name || user?.email || "Guest"}
             size="small"
-            sx={{ 
-              backgroundColor: 'rgba(255,255,255,0.1)',
-              color: '#ecf0f1',
-              border: '1px solid rgba(255,255,255,0.2)'
+            sx={{
+              backgroundColor: "rgba(255,255,255,0.1)",
+              color: "#ecf0f1",
+              border: "1px solid rgba(255,255,255,0.2)",
             }}
           />
-          <IconButton color="inherit">
-            <NotificationsOutlined />
-          </IconButton>
+          <NotificationPopover />
           <IconButton
             size="large"
             aria-label="account of current user"
@@ -92,28 +105,57 @@ export default function Header({ onMenuClick, title = "Expense Reports" }: Heade
             onClick={handleMenu}
             color="inherit"
           >
-            <Avatar sx={{ width: 32, height: 32, bgcolor: '#e74c3c' }}>
-              {user?.name ? user.name[0] : user?.email ? user.email[0] : '?'}
+            <Avatar sx={{ width: 40, height: 40, bgcolor: "#757575" }}>
+              {getInitials(user?.name)}
             </Avatar>
           </IconButton>
           <Menu
             id="menu-appbar"
             anchorEl={anchorEl}
             anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
+              vertical: "top",
+              horizontal: "right",
             }}
             keepMounted
             transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
+              vertical: "top",
+              horizontal: "right",
             }}
             open={Boolean(anchorEl)}
             onClose={handleClose}
+            sx={{ mt: 6, ml: 2.5 }}
+            slotProps={{
+              paper: { sx: { minWidth: 250 } },
+            }}
           >
-            <MenuItem onClick={handleClose}>{user?.name || 'Profile'}</MenuItem>
-            <MenuItem onClick={handleClose}>{user?.email || 'Settings'}</MenuItem>
-            <MenuItem onClick={handleClose}>Logout</MenuItem>
+            <MenuItem
+              sx={{ display: "flex", alignItems: "center" }}
+              onClick={handleClose}
+            >
+              <AccountCircleIcon color="action" sx={{ mr: 1, fontSize: 29 }} />
+              Profile
+            </MenuItem>
+            <MenuItem
+              sx={{ display: "flex", alignItems: "center" }}
+              onClick={handleClose}
+            >
+              <AccountCircleIcon color="action" sx={{ mr: 1, fontSize: 29 }} />
+              My account
+            </MenuItem>
+            <MenuItem
+              sx={{ display: "flex", alignItems: "center" }}
+              onClick={handleClose}
+            >
+              <SettingsIcon color="action" sx={{ mr: 1, fontSize: 29 }} />
+              Settings
+            </MenuItem>
+            <MenuItem
+              sx={{ display: "flex", alignItems: "center" }}
+              onClick={handleClose}
+            >
+              <LogoutIcon color="action" sx={{ mr: 1, fontSize: 29 }} />
+              Logout
+            </MenuItem>
           </Menu>
         </Box>
       </Toolbar>

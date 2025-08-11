@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import MUIThemeProvider from "@/components/ui/MUIThemeProvider";
-import ChatAI from '@/components/ChatAI';
+import ChatAI from '@/components/chat-ai/ChatAI';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

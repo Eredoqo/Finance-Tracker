@@ -1,13 +1,11 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -19,9 +17,12 @@ model User {
   updatedAt DateTime @updatedAt
 
   // Relations
-  transactions Transaction[]
-  budgets      Budget[]
-  categories   Category[]
+  transactions            Transaction[]
+  budgets                 Budget[]
+  categories              Category[]
+  income                  Income[]
+  notifications           Notification[]
+  notificationPreferences NotificationPreference?
 
   @@map("users")
 }
@@ -68,23 +69,74 @@ model Transaction {
 }
 
 model Budget {
-  id         String      @id @default(uuid())
+  id         String       @id @default(uuid())
   name       String
-  amount     Decimal     @db.Decimal(10, 2)
-  spent      Decimal     @default(0) @db.Decimal(10, 2)
+  amount     Decimal      @db.Decimal(10, 2)
+  spent      Decimal      @default(0) @db.Decimal(10, 2)
   period     BudgetPeriod
   startDate  DateTime
   endDate    DateTime
   userId     String
   categoryId String?
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
 
   // Relations
   user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   category Category? @relation(fields: [categoryId], references: [id])
 
   @@map("budgets")
+}
+
+model Income {
+  id          String   @id @default(uuid())
+  userId      String
+  amount      Decimal  @db.Decimal(10, 2)
+  description String?
+  source      String?
+  date        DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("income")
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  title     String
+  message   String
+  type      NotificationType
+  isRead    Boolean          @default(false)
+  metadata  Json?
+  userId    String
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+model NotificationPreference {
+  id                  String   @id @default(uuid())
+  budgetAlerts        Boolean  @default(true)
+  spendingWarnings    Boolean  @default(true)
+  goalNotifications   Boolean  @default(true)
+  paymentReminders    Boolean  @default(true)
+  emailNotifications  Boolean  @default(false)
+  pushNotifications   Boolean  @default(true)
+  userId              String   @unique
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notification_preferences")
 }
 
 enum TransactionType {
@@ -106,4 +158,15 @@ enum BudgetPeriod {
   MONTHLY
   QUARTERLY
   YEARLY
+}
+
+enum NotificationType {
+  BUDGET_ALERT
+  SPENDING_WARNING
+  GOAL_ACHIEVED
+  PAYMENT_REMINDER
+  TRANSACTION_APPROVED
+  BUDGET_EXCEEDED
+  MONTHLY_SUMMARY
+  INCOME_ADDED
 }

@@ -1,0 +1,12 @@
+### Test: Add Income and Notification
+POST http://localhost:3000/api/income
+Content-Type: application/json
+
+{
+  "userId": "user-1",
+  "amount": 100,
+  "email": "eredoqorri96@gmail.com"
+}
+
+### Test: Get Notifications
+GET http://localhost:3000/api/notifications?userId=your_test_user_id
